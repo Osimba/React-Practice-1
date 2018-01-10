@@ -1,9 +1,10 @@
 class FontChooser extends React.Component {
 
+
     constructor(props) {
 	super(props);
     }
-    
+
 
     render() {
 
@@ -18,4 +19,3 @@ class FontChooser extends React.Component {
 	);
     }
 }
-
