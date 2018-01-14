@@ -6,8 +6,9 @@ class FontChooser extends React.Component {
      this.state = {
        options : false,
        bold : false,
-       fontSize : Number(this.props.size),
-       color : 'black'
+       size : Number(this.props.size),
+       minSize : (Number(this.props.min) < 1) ? 1 : Number(this.props.min),
+       maxSize : (Number(this.props.max) < Number(this.props.min)) ? Number(this.props.min) : Number(this.props.max)
      };
   }
 
@@ -18,15 +19,27 @@ class FontChooser extends React.Component {
     this.setState( {bold: !this.state.bold});
   }
 
+  resetValue() {
+    this.setState( { size: Number(this.props.size)});
+  }
+
   incrementSize() {
-    if(this.state.fontSize < this.props.max) {
-      this.setState( { fontSize: this.state.fontSize + 1 } );
+    if(this.state.size < this.state.maxSize) {
+      this.setState( { size: this.state.size + 1 } );
     }
   }
 
   decrementSize() {
-    if(this.state.fontSize > this.props.min) {
-      this.setState( { fontSize: this.state.fontSize - 1 } );
+    if(this.state.size > this.state.minSize) {
+      this.setState( { size: this.state.size - 1 } );
+    }
+  }
+
+  colorChange() {
+    if(this.state.size > this.state.minSize && this.state.size < this.state.maxSize) {
+      return 'black';
+    } else {
+      return 'red';
     }
   }
 
@@ -35,14 +48,21 @@ class FontChooser extends React.Component {
     render() {
       var optionInfo = this.state.options;
       var weight = this.state.bold ? 'bold' : 'normal';
-      var textSize = this.state.fontSize;
+      if(this.state.size >= this.state.minSize && this.state.size <= this.state.maxSize) {
+        var textSize = this.state.size;
+      } else if(this.state.size < this.state.minSize) {
+        var textSize = this.state.minSize;
+      } else if(this.state.size > this.state.maxSize) {
+        var textSize = this.state.maxSize;
+      }
+      var textColor = this.colorChange();
     	return(
         <div>
           <input type="checkbox" id="boldCheckbox" hidden={!optionInfo} checked={this.state.bold} onChange={this.toggleBold.bind(this)}/>
           <button id="decreaseButton" hidden={!optionInfo} onClick={this.decrementSize.bind(this) }>-</button>
-          <span id="fontSizeSpan" hidden={!optionInfo}>{this.state.fontSize}</span>
+          <span id="fontSizeSpan" onDoubleClick={this.resetValue.bind(this) } hidden={!optionInfo}>{textSize}</span>
           <button id="increaseButton" hidden={!optionInfo} onClick={this.incrementSize.bind(this) }>+</button>
-          <span id="textSpan" onClick={this.toggleOptions.bind(this) } style={{ fontWeight : weight, fontSize : textSize }}>{this.props.text}</span>
+          <span id="textSpan" onClick={this.toggleOptions.bind(this) } style={{ fontWeight : weight, fontSize : textSize, color : textColor }}>{this.props.text}</span>
         </div>
     	);
     }
