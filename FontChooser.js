@@ -5,7 +5,7 @@ class FontChooser extends React.Component {
      super(props);
      this.state = {
        options : false,
-       bold : false,
+       bold : (this.props.bold == 'true') ? true : false,
        size : Number(this.props.size),
        minSize : (Number(this.props.min) < 1) ? 1 : Number(this.props.min),
        maxSize : (Number(this.props.max) < Number(this.props.min)) ? Number(this.props.min) : Number(this.props.max)
@@ -60,9 +60,9 @@ class FontChooser extends React.Component {
         <div>
           <input type="checkbox" id="boldCheckbox" hidden={!optionInfo} checked={this.state.bold} onChange={this.toggleBold.bind(this)}/>
           <button id="decreaseButton" hidden={!optionInfo} onClick={this.decrementSize.bind(this) }>-</button>
-          <span id="fontSizeSpan" onDoubleClick={this.resetValue.bind(this) } hidden={!optionInfo}>{textSize}</span>
+          <span id="fontSizeSpan" onDoubleClick={this.resetValue.bind(this) } hidden={!optionInfo} style={{color : textColor }}>{textSize}</span>
           <button id="increaseButton" hidden={!optionInfo} onClick={this.incrementSize.bind(this) }>+</button>
-          <span id="textSpan" onClick={this.toggleOptions.bind(this) } style={{ fontWeight : weight, fontSize : textSize, color : textColor }}>{this.props.text}</span>
+          <span id="textSpan" onClick={this.toggleOptions.bind(this) } style={{ fontWeight : weight, fontSize : textSize }}>{this.props.text}</span>
         </div>
     	);
     }
